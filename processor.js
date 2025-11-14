@@ -1,5 +1,5 @@
-import e_queue from "./queue";
-import database from "./database";
+const e_queue = require("./queue");
+const database = require("./database");
 
 console.log("Proceesor is working.....");
 
@@ -24,19 +24,19 @@ async function flushBatch(batch) {
   const sql = `INSERT INTO events (site_id, event_type, path, user_id, timestamp) VALUES ${placeholders}`;
 
   try {
-    await db.execute(sql, values);
-    console.log(`Values of ${batch.length} events inserted into DB`);
+    await database.execute(sql, values);
+    console.log(`Values of ${batch.length} events inserted into Database`);
   } catch (err) {
     console.error("Values insertion into databadatabase failed", err);
     eventQueue.unshift(...batch);
   }
 }
 
-setInterval(async()=>{
-    if(e_queue.length === 0){
-        return;
-    }
+setInterval(async () => {
+  if (e_queue.length === 0) {
+    return;
+  }
 
-    const batch = e_queue.splice(0, BATCH_SIZE);
-    await flushBatch(batch);
+  const batch = e_queue.splice(0, BATCH_SIZE);
+  await flushBatch(batch);
 }, INTERVAL_MS);

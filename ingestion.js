@@ -1,6 +1,5 @@
 const express = require("express");
-
-import e_queue from "./queue";
+const e_queue = require('./queue');
 
 const app = express();
 
